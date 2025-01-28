@@ -1,0 +1,45 @@
+
+
+        <div class="card w-100 rounded-4">
+          <div class="card-body">
+           <div class="d-flex align-items-start justify-content-between mb-3">
+             
+                <h5 class="mb-0 text-success">Assigned Items</h5>
+                <button *ngIf="selectedItems.length > 0" (click)="DisposeBulkFromStockMasterByIdArray()" class="btn btn-danger">Dispose Selected</button>
+            
+            </div>
+             <div class="table-responsive user-list">
+                 <table class="table align-middle">
+                    <thead>
+                      <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"></th>
+                        <th>Vendor Name</th>
+                        <th>Category Name</th>
+                        <th>Product Name</th>
+                        <th>Item Code</th>
+                        <th>Assign Date</th>
+                        <th>Expiry Date</th>
+                        <th>Dispose</th>
+                      </thead>
+                    <tbody>
+                        @for(item of assignedItems; track $index) {
+                            <tr>
+                              <td><input type="checkbox" [(ngModel)]="item.selected" (change)="updateSelection()"></td>
+                                <td>{{item.vendorName}}</td>
+                                <td>{{item.categoryName}}</td>
+                                <td>{{item.productName}}</td>
+                                <td>{{item.stockItemCode}}</td>
+                                <td>{{item.assignDt | date}}</td>
+                                <td>{{item.expiryDt | date}}</td>
+                                <td style="text-align: center;">
+                                    <button (click)="disposeItemById(item.id ?? 0)" title="Dispose This Item" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                 </table>
+             </div>
+          </div>
+        </div>
+  

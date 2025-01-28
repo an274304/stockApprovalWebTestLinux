@@ -1,0 +1,62 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center" style="margin-bottom: 7%;">
+            <div class="breadcrumb-title pe-3">Dashboard</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+
+        <app-profile-card [selectedUser]="selectedUser"></app-profile-card>
+
+
+        <div class="card border-top border-3 border-danger rounded-0">
+            <div class="card-header py-3 px-4">
+                <h5 class="mb-0 text-danger">Update Password</h5>
+            </div>
+            <div class="card-body p-4">
+                <form [formGroup]="passwordForm" class="row g-3">
+                    <!-- New Password Input Field -->
+                    <div class="col-md-6">
+                        <input type="text" formControlName="newPassword" class="form-control rounded-0"
+                            placeholder="Enter New Password">
+                        <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+                            class="text-danger">
+                            <small *ngIf="passwordForm.get('newPassword')?.errors?.['required']">Password is
+                                required.</small>
+                            <small *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Password must be at
+                                least 6 characters long.</small>
+                            <small *ngIf="passwordForm.get('newPassword')?.errors?.['maxlength']">Password cannot exceed
+                                50 characters.</small>
+                        </div>
+                    </div>
+
+                    <!-- Update Button Section -->
+                    <div class="col-md-3 d-flex align-items-center">
+                        <button type="button" (click)="UpdatePassword()" class="btn btn-outline-success w-100">
+                            <i class="bi bi-box-arrow-up me-2"></i>Update
+                        </button>
+                    </div>
+
+                    <!-- Reset Button Section -->
+                    <div class="col-md-3 d-flex align-items-center">
+                        <button type="button" (click)="resetForm()" class="btn btn-outline-danger w-100">
+                            <i class="bi bi-box-arrow-up me-2"></i>Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->

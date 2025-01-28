@@ -1,0 +1,104 @@
+<!--start header-->
+<header class="top-header">
+    <nav class="navbar navbar-expand align-items-center gap-4">
+      <div class="btn-toggle">
+        <a href="javascript:;"><i class="material-icons-outlined">menu</i></a>
+      </div>
+
+      <div class="flex-grow-1 search-content">
+
+      </div>
+
+      <ul class="navbar-nav gap-1 nav-right-links align-items-center">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" data-bs-auto-close="outside"
+            data-bs-toggle="dropdown" href="javascript:;">
+            <img src="{{userImg}}" class="rounded-circle p-1 border" width="45" height="45" alt="">
+          </a>
+          <div class="dropdown-menu dropdown-notify-custom dropdown-menu-end shadow">
+            <div class="notify-list">
+              <a class="dropdown-item  gap-2 py-1" routerLink="/director/profile">
+                <div class="text-center">
+                  <img src="{{userImg}}" class="rounded-circle p-1 shadow mb-3" width="90" height="90"
+                    alt="">
+                  <h5 class="user-name mb-0 fw-bold">Hello, {{username}}</h5>
+                </div>
+              </a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:;" (click)="logOut()"><i
+                  class="material-icons-outlined">power_settings_new</i>Logout</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+    </nav>
+  </header>
+  <!--end top header-->
+
+
+     <!--start sidebar-->
+     <aside class="sidebar-wrapper" data-simplebar="true">
+        <div class="sidebar-header">
+          <div class="logo-icon">
+            <img src="assets/icons/minilogo_webp.webp" class="logo-img" alt="">
+          </div>
+          <div class="logo-name flex-grow-1">
+            <h5 class="mb-0">Stocky</h5>
+          </div>
+          <div class="sidebar-close">
+            <span class="material-icons-outlined">close</span>
+          </div>
+        </div>
+        <div class="sidebar-nav">
+            <!--navigation-->
+            <ul class="metismenu" id="sidenav">
+              <li>
+                <a routerLink="/director">
+                  <div class="parent-icon"><i class="material-icons-outlined">home</i>
+                  </div>
+                  <div class="menu-title">Dashboard</div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;" class="has-arrow">
+                  <div class="parent-icon"><i class="material-icons-outlined">menu</i>
+                  </div>
+                  <div class="menu-title">Purchase Bill</div>
+                </a>
+                <ul>
+                  <li><a routerLink="/director/bill-pending"><i class="material-icons-outlined">arrow_right</i>Pending</a></li>
+                  <li><a routerLink="/director/bill-approved"><i class="material-icons-outlined">arrow_right</i>Approved</a></li>
+                  <li><a routerLink="/director/bill-rejected"><i class="material-icons-outlined">arrow_right</i>Rejected</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:;" class="has-arrow">
+                  <div class="parent-icon"><i class="material-icons-outlined">engineering</i>
+                  </div>
+                  <div class="menu-title">Service</div>
+                </a>
+                <ul>
+                  <li><a routerLink="/director/service-pending"><i class="material-icons-outlined">arrow_right</i>Pending</a></li>
+                  <li><a routerLink="/director/service-approved"><i class="material-icons-outlined">arrow_right</i>Approved</a></li>
+                  <li><a routerLink="/director/service-rejected"><i class="material-icons-outlined">arrow_right</i>Rejected</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:;" class="has-arrow">
+                  <div class="parent-icon"><i class="material-icons-outlined">legend_toggle</i>
+                  </div>
+                  <div class="menu-title">Stock</div>
+                </a>
+                <ul>
+                  <li><a routerLink="/director/available"><i class="material-icons-outlined">arrow_right</i>Available</a></li>
+                </ul>
+              </li>
+             </ul>
+            <!--end navigation-->
+        </div>
+      </aside>
+    <!--end sidebar-->
+
+    <router-outlet> </router-outlet>

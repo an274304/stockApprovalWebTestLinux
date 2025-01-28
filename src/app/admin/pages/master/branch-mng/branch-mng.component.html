@@ -1,0 +1,112 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Master</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Branch Management</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12 col-lg-3 d-flex align-items-stretch">
+                <div class="card w-100 rounded-4">
+                  <div class="card-body">
+                   <div class="d-flex align-items-start justify-content-between mb-3">
+                      <div class="">
+                        <h5 class="mb-0">Branches</h5>
+                      </div>
+                    </div>
+                    <div class="order-search position-relative my-3">
+                      <input  [(ngModel)]="searchTerm"   (ngModelChange)="onSearchChange()" class="form-control rounded-5 px-5" type="text" placeholder="Search">
+                      <span class="material-icons-outlined position-absolute ms-3 translate-middle-y start-0 top-50">search</span>
+                    </div>
+                     <div class="table-responsive user-list">
+                         <table class="table align-middle">
+                            <tbody>
+                                @for(item of filteredBranches; track $index) {
+                                    <tr (click)="onSelectCategory(item)">
+                                        <td>{{item.branchName}}</td>
+                                      </tr>
+                                }
+                            </tbody>
+                         </table>
+                     </div>
+                  </div>
+                </div>
+              </div>
+            <div class="col-12 col-lg-9">
+                <div class="card border-top border-3 border-danger rounded-0">
+                    <div class="card-header py-3 px-4">
+                        <h5 class="mb-0 text-danger">{{selectedBranch ? 'Update' : 'New'}} Branch</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form [formGroup]="branchForm" class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Branch Name</label>
+                                <input type="text" formControlName="branchName" class="form-control rounded-0" placeholder="Branch Name">
+                                <div *ngIf="branchForm.get('branchName')?.invalid && branchForm.get('branchName')?.touched" class="text-danger">
+                                  <small *ngIf="branchForm.get('branchName')?.errors?.['required']">Branch Name is required.</small>
+                                  <small *ngIf="branchForm.get('branchName')?.errors?.['maxLength']">Branch Name cannot exceed 100 characters.</small>
+                                </div>
+                              </div>
+                              
+                              <div class="col-md-3">
+                                <label class="form-label">Branch Code</label>
+                                <input type="text" formControlName="branchCode" class="form-control rounded-0" placeholder="Branch Code">
+                                <div *ngIf="branchForm.get('branchCode')?.invalid && branchForm.get('branchCode')?.touched" class="text-danger">
+                                  <small *ngIf="branchForm.get('branchCode')?.errors?.['required']">Branch Code is required.</small>
+                                  <small *ngIf="branchForm.get('branchCode')?.errors?.['maxLength']">Branch Code cannot exceed 10 characters.</small>
+                                </div>
+                              </div>
+                              
+                              <div class="col-md-3">
+                                <label class="form-label">Branch Prefix</label>
+                                <input type="text" formControlName="branchPrefix" class="form-control rounded-0" placeholder="Branch Prefix">
+                                <div *ngIf="branchForm.get('branchPrefix')?.invalid && branchForm.get('branchPrefix')?.touched" class="text-danger">
+                                  <small *ngIf="branchForm.get('branchPrefix')?.errors?.['required']">Branch Prefix is required.</small>
+                                  <small *ngIf="branchForm.get('branchPrefix')?.errors?.['maxLength']">Branch Prefix cannot exceed 5 characters.</small>
+                                </div>
+                              </div>
+                              
+                          
+                              <div class="col-md-6">
+                                <label class="form-label">Branch Address</label>
+                                <textarea formControlName="branchAddress" class="form-control rounded-0" placeholder="Branch Address"></textarea>
+                                <div *ngIf="branchForm.get('branchAddress')?.invalid && (branchForm.get('branchAddress')?.touched || branchForm.get('branchAddress')?.dirty)" class="text-danger">
+                                    <ng-container *ngIf="branchForm.get('branchAddress')?.errors?.['required']">
+                                        <small>Branch Address is required. For Shipping Items.</small>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Branch Image</label>
+                                <input type="file" formControlName="branchImg"  (change)="onFileChange($event)" #branchFileInput class="form-control rounded-0">
+                            </div>
+                            <div class="col-md-3">
+                                <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Image Preview"  class="img-thumbnail"/>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-md-flex d-grid align-items-center gap-3">
+                                    <button type="button" (click)="submitForm()" class="btn btn-outline-success flex-fill"><i class="bi bi-box-arrow-up me-2"></i>Submit</button>
+                                    <button type="button" (click)="resetForm()" class="btn btn-outline-danger flex-fill"><i class="bi bi-x-circle me-2"></i>Reset</button>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->

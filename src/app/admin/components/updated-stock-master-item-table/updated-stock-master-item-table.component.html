@@ -1,0 +1,31 @@
+<div class="card-body">
+    <div class="table-responsive">
+        <table id="printStockItemCodeTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Sn.</th>
+                    <th>Item Code</th>
+                    <th>Item Expiry Date</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let item of updatedStockMasterItem; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.stockItemCode }}</td>
+                    <td>{{ item.stockItemExpDt | date }}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <div   style="display: flex; justify-content: center;">
+                            <button type="button" (click)="printTable()"
+                                class="btn btn-outline-primary col-md-4"><i
+                                    class="bi bi-printer me-2"></i>Print Slip</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

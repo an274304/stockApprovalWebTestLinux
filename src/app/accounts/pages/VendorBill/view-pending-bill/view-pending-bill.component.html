@@ -1,0 +1,140 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Vendor Bill</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">View Pending Order Items</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-top border-3 border-danger rounded-0">
+                    <div class="card-header py-3 px-4">
+                        <h5 class="mb-0 text-danger">Purchase Order</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="row g-3">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <label for="inputPONO" class="col-sm-3 col-form-label">P.O No.</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseOrderNo"
+                                                name="purchaseOrderNo" readonly aria-label="Purchase Order Number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                               
+                                <div class="col-md-5 text-center">
+                                    <div class="row">
+                                        <a *ngIf="purchaseOrderVendorBillPath" href="{{purchaseOrderVendorBillPath}}" target="_blank" class="text-white">View Bill</a>
+                                    </div>
+                                    
+                                    <hr>
+
+                                    <div class="row">
+                                        <a *ngIf="purchaseOrderAcctsBillPayReceipt" href="{{purchaseOrderAcctsBillPayReceipt}}" target="_blank" class="text-white">View Bill Recipt</a>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="row mb-2">
+                                        <label for="inputPODt" class="col-sm-3 col-form-label">P.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseOrderDt"
+                                                name="purchaseOrderDt" readonly aria-label="Purchase Order Date">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="inputDODt" class="col-sm-3 col-form-label">D.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseDeliveryDt"
+                                                name="purchaseDeliveryDt" readonly aria-label="Delivery Order Date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <textarea class="form-control rounded-0" rows="2" [(ngModel)]="purchaseOrderRemark"
+                                    readonly name="purchaseOrderRemark" placeholder="Any Remark For Order ?"
+                                    aria-label="Order Remark"></textarea>
+                            </div>
+
+                            <!-- Table Start -->
+                            <div class="row g-3">
+                                <table class="table table-bordered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Product Name</th>
+                                            <th style="text-align: center;">Remark</th>
+                                            <th style="text-align: center;">Rate</th>
+                                            <th style="text-align: center;">Qty</th>
+                                            <th style="text-align: center;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of formDataApiResult.data?.purchaseItems; let i = index">
+                                            <td style="text-align: center; display: none;">{{ item.id }}</td>
+                                            <td style="text-align: center;">{{ item.proName }}</td>
+                                            <td style="text-align: center;">{{ item.itemRemark }}</td>
+                                            <td style="text-align: center;">{{ item.itemRate }}</td>
+                                            <td style="text-align: center;">{{ item.itemQty }}</td>
+                                            <td style="text-align: center;">{{ calculateAmount(item) }}</td>
+                                        </tr>
+                                        <tr style="text-align: end;">
+                                            <td colspan="4">Total</td>
+                                            <td style="text-align: center;">{{ totalAmount }}</td>
+                                        </tr>
+                                        <tr style="text-align: end;">
+                                            <td colspan="4">Select Currency</td>
+                                            <td style="text-align: center;">
+                                                {{currency}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Table Start -->
+
+
+                            <div class="row g-3">
+                                 <div class="col-md-8 align-items-center gap-3" >
+                                   <div class="row d-flex align-items-center">
+                                    <div class="col-sm-5 d-flex justify-content-center">
+                                        <small class="text-danger">Select Bill's Receipt</small>
+                                    </div>
+                                    
+                                    <div class="col-sm-7">
+                                        <input type="file" #billInputFile class="form-control  rounded-0"/>
+                                    </div>
+                                   </div>
+                                </div>
+                             
+                                <div class="col-md-4  d-md-flex d-grid align-items-center gap-3">
+                                    <button type="button" (click)="UploadBillReceipt()"
+                                        class="btn btn-outline-success flex-fill"><i
+                                            class="bi bi-box-arrow-up me-2"></i>Upload Receipt</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->

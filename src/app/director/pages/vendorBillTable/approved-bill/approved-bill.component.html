@@ -1,0 +1,100 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Vendor</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);" aria-label="Home">
+                                <i class="bx bx-home-alt" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Approved Bill</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <hr>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="ApprovedBillTable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 20px;">Sn.</th>
+                                <th style="min-width: 50px;">P.O. No.</th>
+                                <th style="min-width: 200px;">Remark</th>
+                                <th style="min-width: 100px;">Order Date</th>
+                                <th style="min-width: 100px;">Delivery Date</th>
+                                <th style="min-width: 200px;">Approve Date ?</th>
+                                <th style="min-width: 200px;">Reason ?</th>
+                                <th style="min-width: 200px;">View</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="hasData; else noDataTemplate">
+                            <tr *ngFor="let item of tableListApiResult.dataList; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ item.purchaseOrderNo }}</td>
+                                <td>{{ item.purchaseRemark }}</td>
+                                <td>{{ item.purchaseOrderDt | date }}</td> 
+                                <td>{{ item.purchaseExpDelDt | date }}</td>
+                                <td>{{ item.orderApproveBy }} <br> {{ item.orderApproveDt | date:'medium' }}</td>
+                                <td>{{ item.approveDirectorMess }}</td> 
+                                <td class="d-flex justify-content-around align-items-center">
+                                    <button type="button" title="View Approved Items"
+                                        (click)="onClickGetApprovedItemByOrderNo(item.purchaseOrderNo || '')"
+                                        class="btn btn-sm btn-outline-success flex-fill me-2">
+                                        <i class="bi bi-eye me-1"></i>View
+                                    </button>
+
+                                    <button type="button" title="Download Purchase Order Receipt"
+                                    (click)="downloadPurchaseOrder(item.purchaseOrderNo || '')"
+                                    class="btn btn-sm btn-outline-primary flex-fill me-2">
+                                    <i class="bi bi-download me-1"></i>PO
+                                     </button>
+
+                                     <a *ngIf="item.isFromAdminToAccts" type="button" title="View Vendor Bill From Admin"
+                                     class="btn btn-sm btn-outline-warning flex-fill me-2"
+                                     href="{{item.vendorBillPath}}" target="_blank">
+                                     <i class="bi bi-receipt me-1"></i>Bill
+                                 </a>
+
+                                 <a *ngIf="item.isAcctsBillPayed" type="button" title="View Payment Receipt From Account"
+                                     class="btn btn-sm btn-outline-danger flex-fill"
+                                     href="{{item.acctsBillPayReceipt}}" target="_blank">
+                                     <i class="bi bi-layout-text-sidebar-reverse me-1"></i>Receipt
+                                 </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDataTemplate>
+                        <div class="text-center">No data available</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->
+
+    <!-- Pop For View Order Items -->
+    <div class="modal fade" id="ApprovedOrderitemPop" tabindex="-1" aria-labelledby="ApprovedOrderitemPopLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="ApprovedOrderitemPopLabel">Approved Order Items</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               
+            </div>
+          </div>
+        </div>
+      </div>
+     <!-- End Pop For View Order Items -->

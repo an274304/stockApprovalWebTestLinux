@@ -1,0 +1,226 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Purchase</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">New Purchase Order</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-top border-3 border-danger rounded-0">
+                    <div class="card-header py-3 px-4">
+                        <h5 class="mb-0 text-danger">Form</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="row g-3">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <label for="inputPONO" class="col-sm-3 col-form-label">P.O No.</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="inputPONO"
+                                                [(ngModel)]="purchaseOrderNo" name="purchaseOrderNo" readonly
+                                                aria-label="Purchase Order Number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5"></div>
+
+                                <div class="col-md-4">
+                                    <div class="row mb-2">
+                                        <label for="inputPODt" class="col-sm-3 col-form-label">P.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="date" class="form-control" id="inputPODt"
+                                                [(ngModel)]="purchaseOrderDt" name="purchaseOrderDt"
+                                                aria-label="Purchase Order Date">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="inputDODt" class="col-sm-3 col-form-label">D.O Date<span><sup
+                                                    class="text-danger">*</sup></span> </label>
+                                        <div class="col-sm-9">
+                                            <input type="date" class="form-control" id="inputDODt"
+                                                [(ngModel)]="purchaseDeliveryDt" name="purchaseDeliveryDt"
+                                                aria-label="Delivery Order Date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <textarea class="form-control rounded-0" rows="2" [(ngModel)]="purchaseOrderRemark"
+                                    name="purchaseOrderRemark" placeholder="Any Remark For Order ?"
+                                    aria-label="Order Remark"></textarea>
+                            </div>
+
+                            <!-- Table Form -->
+                            <div class="row g-3">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Category Name</label>
+                                            <select [(ngModel)]="catId" name="catId" (change)="onCategoryChange($event)"
+                                                class="form-select rounded-0" id="category-select" required>
+                                                <option value="0" disabled selected>Select Category</option>
+                                                <option *ngFor="let category of filteredCategories"
+                                                    [value]="category.id">
+                                                    {{ category.catName }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="catId === 0 || !catId" class="text-danger">
+                                                Category is required.
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Product Name</label>
+                                            <select [(ngModel)]="proId" name="proId" (change)="onProductChange($event)"
+                                                class="form-select rounded-0" id="product-select" required>
+                                                <option value="0" disabled selected>Select Product</option>
+                                                <option *ngFor="let product of filteredProducts" [value]="product.id">
+                                                    {{ product.proName }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="proId === 0 || !proId" class="text-danger">
+                                                Product is required.
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Vendor Name</label>
+                                            <select [(ngModel)]="venId" name="venId" (change)="onVendorChange($event)"
+                                                class="form-select rounded-0" id="vendor-select" required>
+                                                <option value="0" disabled selected>Select Vendor</option>
+                                                <option *ngFor="let vendor of filteredVendors" [value]="vendor.id">
+                                                    {{ vendor.venName }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="venId === 0 || !venId" class="text-danger">
+                                                Vendor is required.
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Rate</label>
+                                            <input type="number" [(ngModel)]="itemRate" (change)="calculateAmount()"
+                                                name="rate" class="form-control rounded-0" placeholder="Rate">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Qty</label>
+                                            <input type="number" [(ngModel)]="itemQty" name="qty"
+                                                (change)="calculateAmount()" class="form-control rounded-0"
+                                                placeholder="Qty">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">GST (%)</label>
+                                            <input type="number" [(ngModel)]="gstPercentage" name="gstPercentage"
+                                                (change)="calculateAmount()" class="form-control rounded-0"
+                                                placeholder="GST (%)">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Amount</label>
+                                            <input type="number" [(ngModel)]="amount" name="amount"
+                                                class="form-control rounded-0" placeholder="Amount">
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Remark</label>
+                                            <input type="text" [(ngModel)]="itemRemark" name="remark"
+                                                class="form-control rounded-0" placeholder="Any Remark For Product ?">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-center justify-content-center">
+                                    <h1 class="mb-0" (click)="addRow()"><i class="bi bi-plus-circle"></i></h1>
+                                </div>
+                            </div>
+                            <!-- Table Form -->
+
+                            <!-- Table Start -->
+                            <div class="row g-3">
+                                <table class="table table-bordered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Product Name</th>
+                                            <th style="text-align: center;">Vendor</th>
+                                            <th style="text-align: center;">Remark</th>
+                                            <th style="text-align: center;">Rate</th>
+                                            <th style="text-align: center;">Qty</th>
+                                            <th style="text-align: center;">Total</th>
+                                            <th style="text-align: center;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of tableItems; let i = index">
+                                            <td style="text-align: center;">{{ item.proName }}</td>
+                                            <td style="text-align: center;">{{ item.venName }}</td>
+                                            <td style="text-align: center;">{{ item.itemRemark }}</td>
+                                            <td style="text-align: center;">{{ item.itemRate }}</td>
+                                            <td style="text-align: center;">{{ item.itemQty }}</td>
+                                            <td style="text-align: center;">{{ item.total }}</td>
+                                            <td style="text-align: center;">
+                                                <button (click)="removeRow(i)" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr style="text-align: end;">
+                                            <td colspan="5">Total</td>
+                                            <td style="text-align: center;">{{ totalAmount }}</td>
+                                        </tr>
+                                        <tr style="text-align: end;">
+                                            <td colspan="6">Select Currency</td>
+                                            <td>
+                                                <select [(ngModel)]="currency" name="currency"
+                                                    (change)="onCurrencyChange($event)" class="form-select rounded-0"
+                                                    required>
+                                                    <option *ngFor="let currency of filteredCurrency"
+                                                        [value]="currency.id">
+                                                        {{ currency.currName }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="currency == '' || !currency" class="text-danger"
+                                                    style="text-align: start!important;">
+                                                    Currency is required.
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Table Start -->
+
+
+                            <div class="row g-3">
+                                <div class="d-md-flex d-grid align-items-center gap-3">
+                                    <button type="button" (click)="onFormSubmit()"
+                                        class="btn btn-outline-success flex-fill"><i
+                                            class="bi bi-box-arrow-up me-2"></i>Send To Director</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->

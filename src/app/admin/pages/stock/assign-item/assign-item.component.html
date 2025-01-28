@@ -1,0 +1,87 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Stock</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Assign Items</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row mb-5">
+            <div class="col-lg-6 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <label for="user-select" class="col-sm-3 col-form-label">Select
+                                User</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i
+                                            class="material-icons-outlined fs-5">person</i></span>
+                                    <select class="form-select" id="user-select" data-placeholder="Choose one User">
+                                        <option value=""></option>
+                                        @for(item of filteredUsers; track $index) {
+                                        <option [value]="item.id">{{item.usName}}</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-profile-card [selectedUser]="selectedUser" *ngIf="isUserSelected"></app-profile-card>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h5 class="mb-4">Assign Item To User</h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <select class="form-select" id="category-select">
+                                    <option value="" disabled selected hidden>Choose one Category</option>
+                                    @for(item of filteredCategories; track $index) {
+                                    <option [value]="item.id">{{item.catName}}</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="product-select">
+                                    <option value="" disabled selected hidden>Choose one Product</option>
+                                    @for(item of filteredProducts; track $index) {
+                                    <option [value]="item.id">{{item.proName}}</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" [value]="availableProduct" class="form-control" id="input3" placeholder="Available" readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number"  [(ngModel)]="assignedQuantity"  (ngModelChange)="onQtyChange()" class="form-control" id="input3" placeholder="Assign Qty.">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-center" *ngIf="isValidCount">
+                                <button type="button" (click)="onAssignItem()" class="btn btn-grd-primary mx-auto">Assign</button>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea class="form-control" [(ngModel)]="assignedRemark" placeholder="Remark If Assign For Department, Area etc."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->

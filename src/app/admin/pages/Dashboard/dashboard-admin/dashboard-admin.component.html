@@ -1,0 +1,92 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+  <div class="main-content">
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+      <div class="breadcrumb-title pe-3">Dashboard</div>
+    </div>
+    <!--end breadcrumb-->
+
+    <div class="row">
+      <div class="col-xl-6 col-xxl-4 d-flex align-items-stretch">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">
+            <div class="mb-3">
+              <div class="mb-3">
+                <h6 class="mb-0 fw-bold">
+                  {{ monthWiseExpense.items && monthWiseExpense.items.length > 0 ? monthWiseExpense.label : 'Expenses Month Wise' }}
+                </h6>
+              </div>
+              <div>
+                <input type="month" class="form-control" (change)="monthWisExpenseChange($event)">
+              </div>
+            </div>
+            <ul class="list-group list-group-flush">
+              <ng-container *ngIf="monthWiseExpense.items && monthWiseExpense.items.length > 0; else emptyMonthWise">
+                <li class="list-group-item px-0 bg-transparent" *ngFor="let item of monthWiseExpense.items">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="wh-42 d-flex align-items-center justify-content-center rounded-3"
+                         [ngClass]="'bg-grd-' + getRandomBackgroundColor()">
+                      <span class="material-icons-outlined text-white">arrow_right_alt</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-0">{{ item.value }}</h6>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                      <p class="mb-0">{{ parseAsNumber( item.count) }}</p>
+                    </div>
+                  </div>
+                </li>
+              </ng-container>
+            
+              <ng-template #emptyMonthWise>
+                <li class="list-group-item px-0 bg-transparent">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="wh-42 d-flex align-items-center justify-content-center rounded-3"
+                         [ngClass]="'bg-grd-' + getRandomBackgroundColor()">
+                         <span class="material-icons-outlined text-white">arrow_upward</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-0">Select Month</h6>
+                    </div>
+                  </div>
+                </li>
+              </ng-template>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 col-xxl-4 d-flex align-items-stretch" *ngFor="let item of dashboardApiResult">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <div class="">
+                <h6 class="mb-0 fw-bold">{{item.label}}</h6>
+              </div>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item px-0 bg-transparent" *ngFor="let itemList of item.items">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="wh-42 d-flex align-items-center justify-content-center rounded-3"
+                    [ngClass]="'bg-grd-' + getRandomBackgroundColor()">
+                    <span class="material-icons-outlined text-white">arrow_right_alt</span>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="mb-0">{{itemList.value}}</h6>
+                  </div>
+                  <div class="d-flex align-items-center gap-3">
+                    <p class="mb-0">{{ parseAsNumber( itemList.count) }}</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!--end main wrapper-->

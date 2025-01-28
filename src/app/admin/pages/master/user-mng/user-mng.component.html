@@ -1,0 +1,156 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Master</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">User Management</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12 col-lg-3 d-flex align-items-stretch">
+                <div class="card w-100 rounded-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                            <div class="">
+                                <h5 class="mb-0">Users</h5>
+                            </div>
+                        </div>
+                        <div class="order-search position-relative my-3">
+                            <input [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()"
+                                class="form-control rounded-5 px-5" type="text" placeholder="Search">
+                            <span
+                                class="material-icons-outlined position-absolute ms-3 translate-middle-y start-0 top-50">search</span>
+                        </div>
+                        <div class="table-responsive user-list">
+                            <table class="table align-middle">
+                                <tbody>
+                                    @for(item of filteredUsers; track $index) {
+                                    <tr (click)="onSelectUser(item)">
+                                        <td>{{item.usName}}</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-9">
+                <div class="card border-top border-3 border-danger rounded-0">
+                    <div class="card-header py-3 px-4">
+                        <h5 class="mb-0 text-danger">{{selectedUser ? 'Update' : 'New'}} User</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form [formGroup]="userForm" class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">User Type</label>
+                                <select formControlName="usTypeId" class="form-select rounded-0">
+                                    <option *ngFor="let type of filteredUserTypeMaster" [value]="type.id">{{ type.usTypeName }}</option>
+                                </select>
+                                <div *ngIf="userForm.get('usTypeId')?.invalid && (userForm.get('usTypeId')?.touched || userForm.get('usTypeId')?.dirty)" class="text-danger">
+                                    <small *ngIf="userForm.get('usTypeId')?.errors?.['required']">User Type is required.</small>
+                                </div>
+                            </div> 
+                            <div class="col-md-4">
+                                <label class="form-label">User Branch</label>
+                                <select formControlName="usBranchId" class="form-select rounded-0">
+                                    <option *ngFor="let branch of filteredBranches" [value]="branch.id">{{
+                                        branch.branchName }}</option>
+                                </select>
+                                <div *ngIf="userForm.get('usBranchId')?.invalid && (userForm.get('usBranchId')?.touched || userForm.get('usBranchId')?.dirty)" class="text-danger">
+                                    <small *ngIf="userForm.get('usBranchId')?.errors?.['required']">User Branch is required.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Department</label>
+                                <select formControlName="usDepartmentId" class="form-select rounded-0">
+                                    <option *ngFor="let department of filteredDepartments" [value]="department.id">{{
+                                        department.depName }}</option>
+                                </select>
+                                <div *ngIf="userForm.get('usDepartmentId')?.invalid && (userForm.get('usDepartmentId')?.touched || userForm.get('usDepartmentId')?.dirty)" class="text-danger">
+                                    <small *ngIf="userForm.get('usDepartmentId')?.errors?.['required']">User Department is required.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Name</label>
+                                <input type="text" formControlName="usName" class="form-control rounded-0"
+                                    placeholder="User Name">
+                                    <div *ngIf="userForm.get('usName')?.invalid && (userForm.get('usName')?.touched || userForm.get('usName')?.dirty)" class="text-danger">
+                                        <small *ngIf="userForm.get('usName')?.errors?.['required']">User Name is required.</small>
+                                        <small *ngIf="userForm.get('usName')?.errors?.['minlength']">User Name must be at least 3 characters long.</small>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Email</label>
+                                <input type="text" formControlName="usEmail" class="form-control rounded-0"
+                                    placeholder="User Email">
+                                    <div *ngIf="userForm.get('usEmail')?.invalid && (userForm.get('usEmail')?.touched || userForm.get('usEmail')?.dirty)" class="text-danger">
+                                        <small *ngIf="userForm.get('usEmail')?.errors?.['required']">Email is required.</small>
+                                        <small *ngIf="userForm.get('usEmail')?.errors?.['email']">Please enter a valid email address.</small>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Mobile</label>
+                                <input type="text" formControlName="usMob" class="form-control rounded-0"
+                                    placeholder="User Mobile">
+                                    <div *ngIf="userForm.get('usMob')?.invalid && (userForm.get('usMob')?.touched || userForm.get('usMob')?.dirty)" class="text-danger">
+                                        <small *ngIf="userForm.get('usMob')?.errors?.['required']">Mobile number is required.</small>
+                                        <small *ngIf="userForm.get('usMob')?.errors?.['pattern']">Please enter a valid 10-digit mobile number.</small>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Password</label>
+                                <input type="text" formControlName="usPassword" class="form-control rounded-0"
+                                    placeholder="User Password">
+                                    <div *ngIf="userForm.get('usPassword')?.invalid && (userForm.get('usPassword')?.touched || userForm.get('usPassword')?.dirty)" class="text-danger">
+                                        <small *ngIf="userForm.get('usPassword')?.errors?.['required']">Password is required.</small>
+                                        <small *ngIf="userForm.get('usPassword')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Address</label>
+                                <textarea formControlName="usAddress" class="form-control rounded-0"
+                                    placeholder="User Address">
+                                </textarea>
+                                <div *ngIf="userForm.get('usAddress')?.invalid && (userForm.get('usAddress')?.touched || userForm.get('usAddress')?.dirty)" class="text-danger">
+                                    <small *ngIf="userForm.get('usAddress')?.errors?.['required']">Address is required.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">User Image</label>
+                                <input type="file" formControlName="usImg" (change)="onFileChange($event)"
+                                    #userFileInput class="form-control rounded-0">
+                            </div>
+                            <div class="col-md-4">
+                                <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Image Preview"
+                                    class="img-thumbnail" />
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-md-flex d-grid align-items-center gap-3">
+                                    <button type="button" (click)="submitForm()"
+                                        class="btn btn-outline-success flex-fill"><i
+                                            class="bi bi-box-arrow-up me-2"></i>Submit</button>
+                                    <button type="button" (click)="resetForm()"
+                                        class="btn btn-outline-danger flex-fill"><i
+                                            class="bi bi-x-circle me-2"></i>Reset</button>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->

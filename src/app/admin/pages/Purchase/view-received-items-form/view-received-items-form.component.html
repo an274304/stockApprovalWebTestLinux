@@ -1,0 +1,268 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Purchase</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">View Received Items</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-top border-3 border-danger rounded-0">
+                    <div class="card-header py-3 px-4">
+                        <h5 class="mb-0 text-danger">Purchase Order</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="row g-3">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <label for="inputPONO" class="col-sm-3 col-form-label">P.O No.</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseOrderNo"
+                                                name="purchaseOrderNo" readonly aria-label="Purchase Order Number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5"></div>
+
+                                <div class="col-md-4">
+                                    <div class="row mb-2">
+                                        <label for="inputPODt" class="col-sm-3 col-form-label">P.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseOrderDt"
+                                                name="purchaseOrderDt" readonly aria-label="Purchase Order Date">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="inputDODt" class="col-sm-3 col-form-label">D.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseDeliveryDt"
+                                                name="purchaseDeliveryDt" readonly aria-label="Delivery Order Date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <textarea class="form-control rounded-0" rows="2" [(ngModel)]="purchaseOrderRemark"
+                                    name="purchaseOrderRemark" placeholder="Any Remark For Order ?"
+                                    aria-label="Order Remark"></textarea>
+                            </div>
+
+                            <!-- Table Start -->
+                            <div class="row g-3">
+                                <div class="table-wrapper">
+                                    <table class="table table-bordered mb-0" id="updateItemUpdateTable">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">Product</th>
+                                                <th style="text-align: center;">Product Name</th>
+                                                <th style="text-align: center;">Vendor Name</th>
+                                                <th style="text-align: center;">Remark</th>
+                                                <th style="text-align: center;">Rate</th>
+                                                <th style="text-align: center;">Qty</th>
+                                                <th style="text-align: center;">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let item of formDataApiResult.data?.purchaseItems; let i = index">
+                                                <td style="text-align: center; display: none;">{{ item.id }}</td>
+                                                <td style="text-align: center;">
+                                                    <img src="{{item.itemName}}" alt="Product Image" width="100px"
+                                                        (mouseover)="hoveredImage = item.itemName || null"
+                                                        (mouseleave)="hoveredImage = null"
+                                                        class="img-fluid img-thumbnail">
+                                                </td>
+                                                <td style="text-align: center;">{{ item.proName }}</td>
+                                                <td style="text-align: center;">{{ item.venName }}</td>
+                                                <td style="text-align: center;">{{ item.itemRemark }}</td>
+                                                <td style="text-align: center;">
+                                                    {{ item.itemRate }}
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <input type="number" step="1" value="{{ item.itemQty }}"
+                                                        class="form-control form-control-sm"
+                                                        (input)="limitInput($event, item.itemQty ?? 0)">
+                                                </td>
+                                                <td style="text-align: center;">{{ calculateAmount(item) }}</td>
+                                            </tr>
+                                            <tr style="text-align: end;">
+                                                <td colspan="6">Total</td>
+                                                <td style="text-align: center;">{{ totalAmount }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6" style="text-align: end;">Selected Currency</td>
+                                                <td style="text-align: center;">
+                                                    {{currency}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Table Start -->
+
+
+                            <div class="row g-3">
+                                <div class="col-md-4  d-md-flex d-grid align-items-center gap-3"
+                                    *ngIf="!purchaseOrderVendorBillPath">
+                                    <button type="button" class="btn btn-outline-danger flex-fill"><i
+                                            class="bi bi-x-circle me-2"></i>Reject</button>
+                                </div>
+
+
+                                <div class="col-md-4 align-items-center gap-3" *ngIf="!purchaseOrderVendorBillPath">
+
+                                    <div class="row d-flex align-items-center">
+
+                                        <div class="col-sm-5 d-flex justify-content-center">
+                                            <small class="text-danger">Remark</small>
+                                        </div>
+
+                                        <div class="col-sm-7">
+                                            <textarea class="form-control" [(ngModel)]="adminReceiveMess"
+                                                name="adminReceiveMess">
+
+                                           </textarea>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <div class="row d-flex align-items-center">
+
+                                        <div class="col-sm-5 d-flex justify-content-center">
+                                            <small class="text-danger">Is Already Paid</small>
+                                        </div>
+
+                                        <div class="col-sm-7">
+                                            <label style="margin: 0 30% 0 20%;">
+                                                <input type="radio" name="isAlreadyPaid" [(ngModel)]="isAlreadyPaid"
+                                                    [value]="true" /> Yes
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="isAlreadyPaid" [(ngModel)]="isAlreadyPaid"
+                                                    [value]="false" checked /> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row d-flex align-items-center" *ngIf="!isAlreadyPaid || isAlreadyPaid">
+                                        <div class="col-sm-5 d-flex justify-content-center">
+                                            <small class="text-danger">Vendor's Bill</small>
+                                        </div>
+
+                                        <div class="col-sm-7">
+                                            <input type="file" #billInputFile class="form-control  rounded-0" />
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row d-flex align-items-center" *ngIf="isAlreadyPaid">
+                                        <div class="col-sm-5 d-flex justify-content-center">
+                                            <small class="text-danger">Payment's Receipt</small>
+                                        </div>
+
+                                        <div class="col-sm-7">
+                                            <input type="file" #receiptInputFile class="form-control  rounded-0" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-md-3  d-md-flex d-grid align-items-center gap-3"
+                                    *ngIf="!purchaseOrderVendorBillPath">
+                                    <button type="button" (click)="BillSendTOAcctsAndStock()"
+                                        class="btn btn-outline-success flex-fill"><i class="bi bi-cursor me-2"></i>Send
+                                        To Accts & Stock</button>
+                                </div>
+
+                                <div class="col-md-2  d-md-flex d-grid align-items-center gap-3"
+                                    *ngIf="!purchaseOrderVendorBillPath">
+                                    <button type="button" (click)="onItemUpdateClick()"
+                                        class="btn btn-outline-primary flex-fill"><i
+                                            class="bi bi-box-arrow-up me-2"></i>Update</button>
+                                </div> -->
+
+                                <div class="col-md-4 align-items-center gap-3">
+
+                                    <div class="d-md-flex d-grid align-items-center gap-3" *ngIf="!purchaseOrderVendorBillPath">
+                                        <button 
+                                            type="button" 
+                                            (click)="BillSendTOAcctsAndStock()" 
+                                            *ngIf="!isFromAdminToStock; else disabledButton" 
+                                            class="btn btn-outline-success flex-fill">
+                                            <i class="bi bi-cursor me-2"></i>Send To Accts & Stock
+                                        </button>
+                                    
+                                        <ng-template #disabledButton>
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-outline-success flex-fill" 
+                                                [attr.disabled]="true">
+                                                <i class="bi bi-cursor me-2"></i>Send To Accts & Stock
+                                            </button>
+                                        </ng-template>
+                                    </div>
+                                    <br>
+
+                                    <div class="d-md-flex d-grid align-items-center gap-3"
+                                        *ngIf="!purchaseOrderVendorBillPath">
+                                        <button type="button" (click)="BillSendTOAcctsWithBillAndReceipt()"
+                                            class="btn btn-outline-primary flex-fill"><i
+                                                class="bi bi-receipt me-2"></i>Send
+                                            To Accts</button>
+                                    </div>
+                                    <br>
+
+                                    <div class="d-md-flex d-grid align-items-center gap-3"
+                                        *ngIf="!isFromAdminToStock; else isFromAdminToStockTrue">
+                                        <button type="button" (click)="ItemsSendToStock()"
+                                            class="btn btn-outline-warning flex-fill"><i
+                                                class="bi bi-menu-button-wide me-2"></i>Send
+                                            To Stock</button>
+                                    </div>
+                                    <ng-template #isFromAdminToStockTrue>
+                                        <div class="d-md-flex d-grid align-items-center gap-3">
+                                            <button type="button"
+                                                class="btn btn-outline-warning flex-fill" 
+                                                [attr.disabled]="true">
+                                                <i class="bi bi-menu-button-wide me-2"></i>Already Stocked
+                                            </button>
+                                        </div>
+                                    </ng-template>
+                                    <br>
+
+                                    <div class="d-md-flex d-grid align-items-center gap-3"
+                                        *ngIf="!purchaseOrderVendorBillPath">
+                                        <button type="button" (click)="onItemUpdateClick()"
+                                            class="btn btn-outline-danger flex-fill"><i
+                                                class="bi bi-box-arrow-up me-2"></i>Update</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->
+
+<!-- Larger image preview -->
+<div *ngIf="hoveredImage" class="image-preview">
+    <img [src]="hoveredImage" alt="Preview" class="preview-img">
+</div>

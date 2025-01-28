@@ -1,0 +1,82 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Purchase</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Waiting Order</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <hr>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="WaitTable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sn.</th>
+                                <th>P.O. No.</th>
+                                <th>Remark</th>
+                                <th>Order Date</th>
+                                <th>Delivery date</th>
+                                <th>Approve By ?</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="hasData; else noDataTemplate">
+
+                            <tr *ngFor="let item of tableListApiResult.dataList; let i = index">
+                                <td>{{ i + 1 }}</td> <!-- Display the index starting from 1 -->
+                                <td>{{ item.purchaseOrderNo }}</td>
+                                <td>{{ item.purchaseRemark }}</td>
+                                <td>{{ item.purchaseOrderDt | date }}</td> <!-- Format the date if needed -->
+                                <td>{{ item.purchaseExpDelDt | date }}</td> <!-- Format the date if needed -->
+                                <td>{{ item.orderApproveBy }}</td>
+                                <td style="text-align: center;">
+                                    <button type="button" title="Received items At Delivery Address" *ngIf="userRole == 'Admin'"
+                                        (click)="viewReceivedItems(item.purchaseOrderNo || '')"
+                                        class="btn btn-sm btn-outline-success flex-fill me-2">
+                                        <i class="bi bi-eye me-1"></i>View
+                                    </button>
+
+                                    <button type="button" title="Received items At Delivery Address"
+                                    (click)="downloadPurchaseOrder(item.purchaseOrderNo || '')"
+                                    class="btn btn-sm btn-outline-success flex-fill">
+                                    <i class="bi bi-download me-1"></i>PO
+                                </button>
+                                </td>
+                              </tr>
+
+                     
+                        </tbody>
+                        <!-- <tfoot>
+                            <tr>
+                                <th>Sn.</th>
+                                <th>P.O. No.</th>
+                                <th>Remark</th>
+                                <th>Order Date</th>
+                                <th>Delivery date</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot> -->
+                    </table>
+                    <ng-template #noDataTemplate>
+                        <div class="text-center">No data available</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+<!--end main wrapper-->

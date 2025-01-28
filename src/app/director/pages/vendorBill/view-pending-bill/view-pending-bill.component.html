@@ -1,0 +1,188 @@
+<!--start main wrapper-->
+<main class="main-wrapper">
+    <div class="main-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Vendor Bill</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">View Pending Order Items</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-top border-3 border-danger rounded-0">
+                    <div class="card-header py-3 px-4">
+                        <h5 class="mb-0 text-danger">Purchase Order</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="row g-3">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <label for="inputPONO" class="col-sm-3 col-form-label">P.O No.</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseOrderNo"
+                                                name="purchaseOrderNo" readonly aria-label="Purchase Order Number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5"></div>
+
+                                <div class="col-md-4">
+                                    <div class="row mb-2">
+                                        <label for="inputPODt" class="col-sm-3 col-form-label">P.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseOrderDt"
+                                                name="purchaseOrderDt" readonly aria-label="Purchase Order Date">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="inputDODt" class="col-sm-3 col-form-label">D.O Date</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" [(ngModel)]="purchaseDeliveryDt"
+                                                name="purchaseDeliveryDt" readonly aria-label="Delivery Order Date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <textarea class="form-control rounded-0" rows="2" [(ngModel)]="purchaseOrderRemark"
+                                    readonly name="purchaseOrderRemark" placeholder="Any Remark For Order ?"
+                                    aria-label="Order Remark"></textarea>
+                            </div>
+
+                            <!-- Table Start -->
+                            <div class="row g-3">
+                                <div class="table-wrapper">
+                                    <table class="table table-bordered mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center;">SN.</th>
+                                                <th style="text-align: center;">Product</th>
+                                                <th style="text-align: center;">Product Name</th>
+                                                <th style="text-align: center;">Vendor Name</th>
+                                                <th style="text-align: center;">Remark</th>
+                                                <th style="text-align: center;">Rate</th>
+                                                <th style="text-align: center;">Qty</th>
+                                                <th style="text-align: center;">Total</th>
+                                                <th style="text-align: center;">Available</th>
+                                                <th style="text-align: center;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let item of formDataApiResult.data?.purchaseItems; let i = index">
+                                                <td style="text-align: center;">{{ i + 1 }}</td>
+                                                <td style="text-align: center;">
+                                                    <img src="{{item.itemName}}" alt="Product Image" width="100px"
+                                                        (mouseover)="hoveredImage = item.itemName || null"
+                                                        (mouseleave)="hoveredImage = null"
+                                                        class="img-fluid img-thumbnail">
+                                                </td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ item.proName
+                                                    }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{
+                                                    item.venName }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{
+                                                    item.itemRemark }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ item.itemRate
+                                                    }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ item.itemQty
+                                                    }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{
+                                                    calculateAmount(item) }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ item.updatedBy
+                                                    }}</td>
+                                                <td class="d-flex justify-content-center align-items-center">
+                                                    <button (click)="removeItem(item.id ?? 0)"
+                                                        title="Remove A Particular Item"
+                                                        class="btn btn-danger btn-sm me-2">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+
+                                                    <button (click)="showHistoryOfItem(item.id ?? 0)"
+                                                        title="Click To View Order History"
+                                                        class="btn btn-success btn-sm">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr style="text-align: end;">
+                                                <td colspan="7">Total</td>
+                                                <td colspan="2" style="text-align: left;">{{ totalAmount }}</td>
+                                            </tr>
+                                            <tr style="text-align: end;">
+                                                <td colspan="7">Selected Currency</td>
+                                                <td colspan="2" style="text-align: left;">
+                                                    {{currency}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Table End -->
+
+
+                            <div class="row g-3">
+                                <div class="col-md-4  d-md-flex d-grid align-items-center gap-3">
+                                    <button type="button" (click)="rejectOrder()"
+                                        class="btn btn-outline-danger flex-fill"><i
+                                            class="bi bi-x-circle me-2"></i>Reject</button>
+                                </div>
+
+
+                                <div class="col-md-4 align-items-center gap-3">
+                                    <input type="text" class="form-control" [(ngModel)]="directorMessage"
+                                        placeholder="Any Message For Admin ?" name="directorMessage"
+                                        aria-label="Director Message">
+                                </div>
+
+                                <div class="col-md-4  d-md-flex d-grid align-items-center gap-3">
+                                    <button type="button" (click)="approveOrder()"
+                                        class="btn btn-outline-success flex-fill"><i
+                                            class="bi bi-box-arrow-up me-2"></i>Approve</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--end main wrapper-->
+
+<!-- Larger image preview -->
+<div *ngIf="hoveredImage" class="image-preview">
+    <img [src]="hoveredImage" alt="Preview" class="preview-img">
+</div>
+
+<!-- Pop For View Order History Items -->
+<div class="modal fade" id="OrderHistoryItemsPop" tabindex="-1" aria-labelledby="OrderHistoryItemsPopLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-danger" id="OrderHistoryItemsPopLabel">Lastest '{{popCurrentItemName}}'
+                    Ordered</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Pop For View Order History Items -->
