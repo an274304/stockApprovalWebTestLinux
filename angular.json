@@ -15,7 +15,7 @@
           "options": {
             "outputPath": "dist/app",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -32,15 +32,9 @@
               }
             ],
             "styles": [
-              "src/styles.css" 
+              "src/styles.css"
             ],
-            "scripts": [
-            ],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -68,6 +62,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "host": "0.0.0.0", // This allows access from external IPs
+            "port": 4200 // Change the port to your desired one
+          },
           "configurations": {
             "production": {
               "buildTarget": "App:build:production"
